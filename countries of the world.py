@@ -14,8 +14,20 @@ df = pd.read_csv('countries of the world.csv')
 select_df = pd.DataFrame(df)
 print(df.keys())
 print(df.shape)
-
 print_line()
+
+print("GDP 集中量數:")
+print("眾數", df["GDP ($ per capita)"].mode())
+print("中位數",df["GDP ($ per capita)"].median())
+print("四分位數",df["GDP ($ per capita)"].quantile(q=0.25),end='  ')
+print(df["GDP ($ per capita)"].quantile(q=0.5),end='  ')
+print(df["GDP ($ per capita)"].quantile(q=0.75))
+print("平均數:",df["GDP ($ per capita)"].mean())
+print("GDP 離散量數:")
+print("全距",df["GDP ($ per capita)"].max()-df["GDP ($ per capita)"].min())
+print("四分位差",df["GDP ($ per capita)"].quantile(0.25)-df["GDP ($ per capita)"].quantile(0.75))
+print("變異數",df["GDP ($ per capita)"].var())
+print("標準差",df["GDP ($ per capita)"].std())
 
 import seaborn as sns
 sns.set(style='whitegrid', context='notebook')
