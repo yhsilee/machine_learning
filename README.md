@@ -1,2 +1,3 @@
 # machine_learning
-for nchu class
+countries of the world is my datasets
+, output.png is the scatter plot
