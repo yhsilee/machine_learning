@@ -1,3 +1,3 @@
 # machine_learning
-countries of the world is my datasets
-, output.png is the scatter plot
+countries_of_the_world.csv is my datasets
+
