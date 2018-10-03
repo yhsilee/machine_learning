@@ -30,12 +30,17 @@ print("標準差",df["GDP ($ per capita)"].std())
 #描述性統計
 print(select_df["GDP ($ per capita)"].describe())
 
-#畫散佈圖(GDP和Phones) 分別採用 seaborn和 .plot來做圖
+#畫散佈圖(GDP和Phones) 分別採用 seaborn和 matplotlib來做圖
 import seaborn as sns
 sns.set(style='whitegrid', context='notebook')
 col = ["GDP ($ per capita)","Phones (per 1000)"]
 sns_plot=sns.pairplot(select_df[col],size=2)
-select_df[col].plot(kind="scatter", x="GDP ($ per capita)", y="Phones (per 1000)",title="Relationship between GDP and Phones")
+plt.show()
+plt.scatter(select_df["GDP ($ per capita)"], select_df["Phones (per 1000)"],  color='blue')
+plt.xlabel("GDP ($ per capita)")
+plt.ylabel("Phones (per 1000)")
+plt.title("Relationship between GDP and Phones")
+plt.show()
 print_line()
 #多欄位間的散佈圖
 #cols = ['Population', 'Area (sq. mi.)', 'Literacy (%)','Phones (per 1000)','Birthrate','Deathrate','Region']
@@ -79,6 +84,7 @@ np_minmax = scaler.fit_transform(df1)
 df_minmax = pd.DataFrame(np_minmax, columns=["GDP ($ per capita)", "Phones (per 1000)"])
 print(df_minmax.head())
 df_minmax.plot(kind="scatter", x="GDP ($ per capita)",y= "Phones (per 1000)")
+plt.show()
 print_line()
 
 #遺漏值
@@ -91,19 +97,30 @@ select_df["Region"] = label_encoder.fit_transform(select_df["Region"])
 
 #線性回歸
 from sklearn.linear_model import LinearRegression
-cols = ['Population', 'Area (sq. mi.)', 'GDP ($ per capita)','Phones (per 1000)','Birthrate','Deathrate']
-y = select_df["Region"]
+cols = [ 'GDP ($ per capita)']
+X = select_df[cols]
+y = select_df['Phones (per 1000)']
 lm = LinearRegression()
-lm.fit(select_df[cols], y) #cols為要分析的欄位
-print("迴歸係數:", lm.coef_)
-print("截距:", lm.intercept_ )
-coef = pd.DataFrame(select_df[cols].keys(), columns=["features"])
-coef["estimatedCoefficients"] = lm.coef_
-print(coef)
+lm.fit(X, y) #cols為要分析的欄位
+y_pred = lm.predict(X)
+print("迴歸係數: " , lm.coef_[0])
+print("截距: %.3f" % lm.intercept_ )
+def lin_regplot(X, y, model):
+    plt.scatter(X, y, c='lightblue')
+    plt.plot(X, model.predict(X), color='red', linewidth=2)    
+    return 
+
+lin_regplot(X, y, lm)
+plt.xlabel('GDP ($ per capita)')
+plt.ylabel('Phones (per 1000)')
+plt.tight_layout()
+plt.savefig('reg.png', dpi=300)
+plt.show()
+
 
 #MSE
 from sklearn.metrics import mean_squared_error
-mse = mean_squared_error(select_df['GDP ($ per capita)'], select_df['Phones (per 1000)'])
+mse = mean_squared_error(y,y_pred)
 print(" MSE=",mse)
 
 
